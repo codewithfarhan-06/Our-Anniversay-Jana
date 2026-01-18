@@ -267,6 +267,7 @@
             margin-top: 20px;
             transition: 0.3s;
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            cursor: pointer;
         }
         .btn-enter:hover {
             transform: scale(1.05);
@@ -574,16 +575,35 @@
             }
         };
 
-        // Gateway Unlock Logic
-        document.getElementById('enterBtn').onclick = () => {
-            const name = document.getElementById('nameInput').value || "Heer";
+        // Gateway Unlock Logic (Fixed for GitHub/Production)
+        document.getElementById('enterBtn').onclick = function() {
+            const name = document.getElementById('nameInput').value.trim() || "Heer";
             document.getElementById('userNameDisplay').innerText = name;
-            gsap.to(".gateway-overlay", { y: -window.innerHeight, duration: 1.5, ease: "power4.inOut", onComplete: () => {
-                document.getElementById('gateway').style.display = 'none';
-                document.getElementById('experience-layer').style.display = 'block';
-                gsap.to("#experience-layer", { opacity: 1, duration: 1 });
-                initHeartGame(); initGiftVault(); initDatesGame(); initScrollAnimations();
-            }});
+            
+            const gateway = document.getElementById('gateway');
+            const layer = document.getElementById('experience-layer');
+
+            // Force immediate layout swap
+            layer.style.display = 'block';
+
+            gsap.timeline()
+                .to(gateway, { 
+                    opacity: 0, 
+                    y: -100, 
+                    duration: 0.8, 
+                    ease: "power2.inOut",
+                    onComplete: () => { gateway.style.display = 'none'; }
+                })
+                .to(layer, { 
+                    opacity: 1, 
+                    duration: 1 
+                }, "-=0.4");
+
+            // Initialize all components after unlocking
+            initHeartGame(); 
+            initGiftVault(); 
+            initDatesGame(); 
+            initScrollAnimations();
         };
 
     </script>
@@ -649,6 +669,7 @@
 
         function initGiftVault() {
             const vault = document.getElementById('giftVault');
+            vault.innerHTML = ''; // Clear existing
             giftData.forEach((msg, i) => {
                 const box = document.createElement('div');
                 box.className = 'gift-box'; box.innerHTML = '🎁';
@@ -668,6 +689,7 @@
         let dIdx = 0;
         function initDatesGame() {
             const c = document.getElementById('dates-canvas');
+            c.innerHTML = ''; // Clear existing
             const pool = [1, 15, 19, 12, 25, 27, 28, 30, 7, 21].sort(()=>Math.random()-0.5);
             pool.forEach(n => {
                 const b = document.createElement('button');
