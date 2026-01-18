@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Anniversary Jana - 19 Jan 2026</title>
+    <title>Happy aniversary WIfeyy - 19 Jan 2026</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -101,19 +101,6 @@
             background: #000; display: flex; justify-content: center; align-items: center;
         }
 
-        .dot {
-            width: 30px; height: 30px;
-            border: 1px solid var(--gold-leaf);
-            border-radius: 50%; cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .dot.active {
-            background: var(--gold-leaf);
-            transform: scale(1.4);
-            box-shadow: 0 0 40px var(--gold-leaf);
-        }
-
         .vow-card {
             border-left: 2px solid var(--gold-leaf);
             padding: 30px; margin: 40px 0;
@@ -129,9 +116,6 @@
             letter-spacing: 4px; box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
             transition: all 0.3s;
         }
-
-        #draw-svg { position: absolute; inset: 0; pointer-events: none; }
-        line { stroke: var(--gold-leaf); stroke-width: 5; stroke-linecap: round; filter: drop-shadow(0 0 8px var(--gold-leaf)); }
 
         .stat-badge {
             display: inline-block; padding: 10px 25px;
@@ -244,15 +228,6 @@
             border-color: #fff;
         }
 
-        .haptic-pulse {
-            animation: haptic 0.4s ease-out;
-        }
-        @keyframes haptic {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); filter: brightness(1.2); }
-            100% { transform: scale(1); }
-        }
-
         .three-d-heart {
             font-size: 100px;
             position: relative;
@@ -281,33 +256,44 @@
         .btn-save:hover { box-shadow: 0 0 20px #d4af37; transform: scale(1.05); }
         .btn-delete:hover { background: rgba(255,0,0,0.1); border-color: red; }
 
+        .btn-enter {
+            background: var(--gold-leaf);
+            color: black;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 20px;
+            transition: 0.3s;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+        .btn-enter:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+        }
+
     </style>
 </head>
 <body>
 
     <div id="royal-cursor"></div>
     <div class="anniversary-header">
-        <div class="shimmer-text tracking-[1.2em] font-black text-[10px] uppercase">Union Since 27 September 2024 • Celebrating 2026</div>
+        <div class="shimmer-text tracking-[1.2em] font-black text-[10px] uppercase">Union Since 27 September 2025 • Celebrating 2026</div>
     </div>
 
     <div id="canvas-container"></div>
 
     <div id="gateway" class="gateway-overlay">
         <div class="glass-panel p-12 text-center max-w-[450px] w-[90%] border-gold-leaf/30">
-            <div class="text-gold-500 text-[9px] tracking-[1.5em] uppercase mb-10 font-bold opacity-60">Heart Lock Recognition</div>
+            <div class="text-gold-500 text-[9px] tracking-[1.5em] uppercase mb-10 font-bold opacity-60">Identity Verification</div>
             <h1 class="text-5xl font-black mb-14 shimmer-text" style="font-family: 'Playfair Display'">Meri <br> Heer</h1>
             
-            <input type="text" id="nameInput" placeholder="Aapka Mukammal Naam..." class="w-full bg-transparent border-b border-gold-500/30 p-4 text-center outline-none text-2xl font-light text-white mb-16 focus:border-gold-500 transition-all">
+            <input type="text" id="nameInput" placeholder="Aapka Mukammal Naam..." class="w-full bg-transparent border-b border-gold-500/30 p-4 text-center outline-none text-2xl font-light text-white mb-10 focus:border-gold-500 transition-all">
             
-            <div class="relative py-10">
-                <div class="grid grid-cols-3 gap-14 mx-auto w-fit relative" id="dotGrid">
-                    <svg id="draw-svg"></svg>
-                    <div class="dot" data-index="0"></div><div class="dot" data-index="1"></div><div class="dot" data-index="2"></div>
-                    <div class="dot" data-index="3"></div><div class="dot" data-index="4"></div><div class="dot" data-index="5"></div>
-                    <div class="dot" data-index="6"></div><div class="dot" data-index="7"></div><div class="dot" data-index="8"></div>
-                </div>
-            </div>
-            <p class="text-[9px] text-white/30 mt-16 tracking-[1em] uppercase">M-Shape for Memory</p>
+            <button id="enterBtn" class="btn-enter">Unlock Heart</button>
+
+            <p class="text-[9px] text-white/30 mt-16 tracking-[1em] uppercase">Private Experience</p>
         </div>
     </div>
 
@@ -315,39 +301,38 @@
         <div class="max-w-xl mx-auto px-6 pb-40">
             
             <section class="text-center py-20">
-                <h2 class="text-7xl font-bold mb-10 leading-tight" style="font-family: 'Dancing Script';">Happy Anniversary, <br><span class="shimmer-text" id="userNameDisplay">Meri Heer</span></h2>
+                <h2 class="text-7xl font-bold mb-10 leading-tight" style="font-family: 'Dancing Script';">Happy Anniversary, <br><span class="shimmer-text" id="userNameDisplay">My Heer</span></h2>
                 <div class="flex flex-wrap justify-center mb-20">
                     <div class="stat-badge">365 Days of Us</div>
                     <div class="stat-badge">8,760 Hours of Love</div>
                     <div class="stat-badge">525,600 Mins of Care</div>
-                    <div class="stat-badge">31,536,000 seconds of Madness</div>
+                    <div class="stat-badge">Infinite Madnsess!!</div>
                 </div>
                 <div class="heart-glow mb-20">💍</div>
             </section>
 
             <section class="glass-panel p-10 mb-20 reveal-node border-gold-leaf/20">
-                <h3 class="text-3xl font-bold mb-8 shimmer-text text-center" style="font-family: 'Playfair Display'">Happy Aniversary ,Guduuu</h3>
+                <h3 class="text-3xl font-bold mb-8 shimmer-text text-center" style="font-family: 'Playfair Display'">Ek Saal Ki Dastaan</h3>
                 <div class="text-center space-y-6">
-                    <p>"To my dearest Jana, today marks exactly one year since our worlds became one. It hasn't just been 365 days; it's been a lifetime of smiles, a billion moments , and the peace of knowing aap meri hain."</p>
-                    <p>"Meri Cutiuuuuu, Aap mere liye sirf meri girlfriend nahi, aap meri sukoon ho. Har ladai mein, har hasi mein, aur har khamoshi mein... sirf aap hi aap ho. Main aapka kitna shukr guzar hoon ke aap meri zindagi mein aaye."</p>
-                    <p>"Main Hamesha khudh ko itna Naseeb wala samjhta hun kyun k maine aapko pa liya aur Insha allah aapko hamehsa khus rakhunga ."</p>
-                    <p class="text-rose-400 font-bold">Happy 1st Anniversary, my Queen!</p>
+                    <p>"To my dearest Heer, today marks exactly one year since our worlds became one. It hasn't just been 365 days; it's been a lifetime of smiles, a billion moments of 'Momo' cravings, and the peace of knowing aap meri hain."</p>
+                    <p>"Aap mere liye sirf meri girlfriend nahi, aap meri sukoon ho. Har ladai mein, har hasi mein, aur har khamoshi mein... sirf aap hi aap ho. Main aapka kitna shukr guzar hoon ke aap meri zindagi mein aaye."</p>
+                    <p class="text-rose-400 font-bold">Happy 1st Anniversary, my Queen!❤️</p>
                 </div>
             </section>
 
             <section class="glass-panel p-10 mb-20 reveal-node border-gold-leaf/20">
-                <h3 class="text-3xl font-bold mb-12 shimmer-text text-center" style="font-family: 'Playfair Display'"> Our Timeline</h3>
+                <h3 class="text-3xl font-bold mb-12 shimmer-text text-center" style="font-family: 'Playfair Display'">Safarnama: Our Timeline</h3>
                 <div class="timeline-box">
                     <div class="timeline-dot"></div>
                     <p class="text-gold-400 font-bold text-xs tracking-widest uppercase">19 January 2025</p>
-                    <h4 class="text-xl font-bold mt-1">Jab Apne Qubool kiya tha!</h4>
+                    <h4 class="text-xl font-bold mt-1">The First Hello</h4>
                     <p class="text-sm text-white/60 italic">The day I realized my search for happiness ended with aapki smile.</p>
                 </div>
                 <div class="timeline-box">
                     <div class="timeline-dot"></div>
-                     <p class="text-gold-400 font-bold text-xs tracking-widest uppercase">27 september  2024</p>
-                    <h4 class="text-xl font-bold mt-1">Our First Talk</h4>
-                    <p class="text-sm text-white/60 italic">Jab hum log ne baat karna suru kiya tha, aapke saath har pal yaadgaar tha.</p>
+                    <p class="text-gold-400 font-bold text-xs tracking-widest uppercase">27 september 2024</p>
+                    <h4 class="text-xl font-bold mt-1">Our first Talk!!</h4>
+                    <p class="text-sm text-white/60 italic">Hum logon ne jo pehli baar baat kiya tha yrrr. Totally awesome.</p>
                 </div>
                 <div class="timeline-box" style="border-left: none;">
                     <div class="timeline-dot"></div>
@@ -365,20 +350,20 @@
                     <div id="score-display" class="absolute top-4 right-4 text-gold-500 font-bold">Hearts: 0/10</div>
                 </div>
                 <div id="heart-win-msg" class="hidden text-center mt-6 p-4 bg-gold-leaf/10 rounded-xl">
-                    <p class="italic text-rose-300">"Just like these hearts, I will catch every tear and every smile of You forever.! Babe.❤️"</p>
+                    <p class="italic text-rose-300">"Just like these hearts, I will catch every tear and every smile of aapka forever.Babe 💫"</p>
                 </div>
             </section>
 
             <section class="glass-panel p-10 mb-20 reveal-node border-gold-leaf/20">
                 <h3 class="text-3xl font-bold mb-10 shimmer-text text-center" style="font-family: 'Playfair Display'">Royal Favorites Vault</h3>
                 <div class="grid grid-cols-2 gap-8 mb-8">
-                    <div class="flex items-center gap-4"><div class="text-3xl">🖤</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">COLOR</p><p class="text-lg">Black</p></div></div>
+                    <div class="flex items-center gap-4"><div class="text-3xl">🌑</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">COLOR</p><p class="text-lg">Black</p></div></div>
                     <div class="flex items-center gap-4"><div class="text-3xl">🫂</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">MOMENT</p><p class="text-lg">With Aap</p></div></div>
                     <div class="flex items-center gap-4"><div class="text-3xl">🪻</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">FLOWER</p><p class="text-lg">Hyacinth</p></div></div>
                     <div class="flex items-center gap-4"><div class="text-3xl">🥟</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">FOOD</p><p class="text-lg">Momo</p></div></div>
-                    <div class="flex items-center gap-4"><div class="text-3xl">🤍</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">SOUND</p><p class="text-lg">Aapki Laughter</p></div></div>
-                    <div class="flex items-center gap-4"><div class="text-3xl">🌙</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">TIME</p><p class="text-lg">Jab humlog Sath hote hain</p></div></div>
-                    <div class="flex items-center gap-4"><div class="text-3xl">🎧</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">SONG</p><p class="text-lg">Ek Tarfa , Humsafar , Finding Her</p></div></div>
+                    <div class="flex items-center gap-4"><div class="text-3xl">🎵</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">SOUND</p><p class="text-lg">Aapki Laughter</p></div></div>
+                    <div class="flex items-center gap-4"><div class="text-3xl">🌙</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">TIME</p><p class="text-lg">Midnight</p></div></div>
+                    <div class="flex items-center gap-4"><div class="text-3xl">🎧</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">SONG</p><p class="text-lg">Ek Tarfa, Humsafar , Finding Her</p></div></div>
                 </div>
                 <div class="border-t border-white/10 pt-8 text-center">
                     <p class="text-gold-400 text-[10px] font-bold tracking-[0.5em] mb-4 uppercase">Royal Melody</p>
@@ -400,25 +385,21 @@
                     </div>
                     <div class="reveal-node">
                         <p>"Likhu toh kya likhu aapki tareef mein,<br>Bas itna jaan lijiye, aap hi meri pehli aur aakhri umeed hain."</p>
+                        <p>"Na khusi achi hai Ae dil , Na malal Acha hai<br>Yaar jis hal me rakhe wahi Haal acha hai"</p>
                     </div>
-                     <div class="reveal-node">
-                        <p>"Milne malane me waqt jayaa na karrrrrr ,<br>Aaa mere Dil me bas ja Sada k Liyeeeee"</p>
                 </div>
-                     <div class="reveal-node">
-                        <p>"Na khusi achi hai Ae dil,Na malal acha haiiiii<br>Yaarr jis hal me rakhe , wahii hal acha haiii"</p>
-                     </div>
             </section>
 
             <section class="glass-panel p-10 mb-20 reveal-node border-gold-leaf/20">
-                <h3 class="text-center text-3xl font-bold mb-10 shimmer-text" style="font-family: 'Playfair Display'">The Promises</h3>
+                <h3 class="text-center text-3xl font-bold mb-10 shimmer-text" style="font-family: 'Playfair Display'">Humara Wada (The Promises)</h3>
                 <div class="space-y-6">
                     <div class="vow-card">
                         <h4 class="text-gold-500 font-bold uppercase tracking-widest text-xs">Humsafar</h4>
                         <p class="italic">"Wada hai mera, har mushkil raste mein main aapka hamsafar ban kar saath nibhaunga."</p>
                     </div>
                     <div class="vow-card">
-                        <h4 class="text-gold-500 font-bold uppercase tracking-widest text-xs">Supporter</h4>
-                        <p class="italic">"Mei hamesha aapka sath dunga jana chahe jo bhi ho jaye."</p>
+                        <h4 class="text-gold-500 font-bold uppercase tracking-widest text-xs">Wafa</h4>
+                        <p class="italic">"Meri wafa hamesha sirf aapke liye rahegi, har din har pal."</p>
                     </div>
                     <div class="vow-card">
                         <h4 class="text-gold-500 font-bold uppercase tracking-widest text-xs">Sukoon</h4>
@@ -444,14 +425,14 @@
                     </div>
                     <div class="p-6 silk-border rounded-2xl heartbeat-sync">
                         <h4 class="text-rose-400 font-black uppercase text-[10px] tracking-widest mb-2">Final Destination</h4>
-                        <p class="text-sm italic">"Mera rasta aap par khatam hota hai. I vow that my last breath will carry aapka name"</p>
+                        <p class="text-sm italic">"Mera rasta aap par khatam hota hai. I vow that my last breath will carry aapka name, just as my first love did."</p>
                     </div>
                 </div>
             </section>
 
             <section class="glass-panel p-8 mb-20 reveal-node border-gold-leaf/20">
                 <h3 class="text-2xl font-bold mb-4 shimmer-text text-center" style="font-family: 'Playfair Display'">The Sacred Numbers</h3>
-                <p class="text-center text-xs text-white/50 mb-6 uppercase tracking-widest">Select Our Dates</p>
+                <p class="text-center text-xs text-white/50 mb-6 uppercase tracking-widest">Select the keys to my heart: 25, 19, 27, 28, 15</p>
                 <div id="dates-canvas" class="p-6 flex flex-wrap gap-3 justify-center items-center"></div>
                 <div id="hug-msg" class="hidden text-center mt-6">
                     <div class="text-7xl mb-4">🫂</div>
@@ -461,7 +442,7 @@
 
             <section class="glass-panel p-10 mb-20 reveal-node">
                 <h3 class="text-center text-3xl font-bold mb-4 shimmer-text" style="font-family: 'Playfair Display'">The Mystery Vault</h3>
-                <p class="text-center text-[10px] text-white/40 mb-10 tracking-[0.4em] uppercase">CLICK EACH BOX TO READ  MESSAGE</p>
+                <p class="text-center text-[10px] text-white/40 mb-10 tracking-[0.4em] uppercase">CLICK EACH BOX TO READ YOUR MESSAGE</p>
                 <div class="gift-grid" id="giftVault"></div>
                 <div class="text-center mt-10">
                     <p id="giftCounter" class="text-gold-500 font-bold tracking-widest text-xs uppercase">Gifts Opened: 0 / 20</p>
@@ -470,7 +451,7 @@
 
             <section class="glass-panel p-10 mb-20 reveal-node silk-border">
                 <h3 class="text-center text-3xl font-bold mb-6 shimmer-text" style="font-family: 'Playfair Display'">Heer's Royal Proclamation</h3>
-                <p class="text-center text-xs text-white/40 mb-8 uppercase tracking-widest">Mere liye kuch by Your Heart</p>
+                <p class="text-center text-xs text-white/40 mb-8 uppercase tracking-widest">A Sacred Space for Your Heart</p>
                 <div class="heart-input-container" id="proclamationArea">
                     <textarea id="proclamationInput" placeholder="Write what you feel, my one-in-a-billion Queen..." 
                               class="w-full bg-transparent outline-none text-rose-100 placeholder:text-rose-900/30 min-h-[200px] resize-none text-lg leading-relaxed"></textarea>
@@ -483,8 +464,8 @@
             </section>
 
             <section class="glass-panel p-10 text-center py-20 reveal-node border-gold-leaf/20">
-                <h3 class="text-3xl font-black mb-6 shimmer-text" style="font-family: 'Playfair Display'">The promise Fingerprint from you.!! </h3>
-                <p class="text-xs text-white/60 tracking-widest uppercase mb-10">Hold for 3 seconds to seal your promise</p>
+                <h3 class="text-3xl font-black mb-6 shimmer-text" style="font-family: 'Playfair Display'">The Fingerprint Promise from you</h3>
+                <p class="text-xs text-white/60 tracking-widest uppercase mb-10">Hold for 3 seconds to seal our promise</p>
                 <div class="fingerprint-container" id="fpArea">
                     <div class="fp-scanner-bar" id="scanLine"></div>
                     <svg class="fp-svg" viewBox="0 0 100 120">
@@ -496,28 +477,27 @@
                 </div>
                 <div id="oathDetails" class="mt-10 space-y-4 text-sm text-white/40 italic">
                     <p id="p1" class="transition-all">I promise to never let you be sad.</p>
-                    <p id="p2" class="transition-all">I promise to always bring love and care.</p>
-                    <p id="p3" class="transition-all">I promise to choose You, every single day.</p>
-                     <p id="p4" class="transition-all">I promise tera hath kabhi nhi chodenge!.</p>
+                    <p id="p2" class="transition-all">I promise to always be there for you whenever you need me.</p>
+                    <p id="p3" class="transition-all">I promise to choose you, every single day.</p>
                 </div>
-                <div id="promiseStatus" class="mt-8 text-rose-500 font-black text-xl opacity-0 tracking-widest">WAADEE SEALED IN BLOOD & LOVE</div>
+                <div id="promiseStatus" class="mt-8 text-rose-500 font-black text-xl opacity-0 tracking-widest">OATH SEALED IN BLOOD & LOVE</div>
             </section>
 
             <section class="glass-panel p-12 mb-20 reveal-node border-gold-leaf/40 text-center">
                 <div class="three-d-heart mb-8">❤️</div>
                 <h3 class="text-4xl font-black mb-10 shimmer-text" style="font-family: 'Playfair Display'">A Royal Thank You</h3>
                 <div class="space-y-6 text-white/80 leading-loose italic">
-                    <p>"Meri pyari Wifeyy , aaj ke iss din main aapka ta-e-dil se shukriya ada karna chahta hoon. Aapne meri zindagi mein aakar isse mukammal kar diya hai. Aapka har ek ehsas, aapki har ek muskurahat mere liye duniya ki sabse keemti cheez hai. Mujhse mohabbat karne ke liye, mujh par bharosa karne ke liye, aur mere har bure waqt mein mera saath dene ke liye main hamesha aapka qarzdaar raunga. Aap sirf meri mohobbat nahi, aap meri poori duniya hain. Thank you for choosing me to be the one who gets to see aapka morning face, aapka messy hair, and aapki beautiful soul. Iss saal ne mujhe sikhaya ke mohabbat sirf lafzon mein nahi hoti, mohabbat aapki har ek saans mein hai. Shukriya meri zindagi ko jannat banane ke liye. Aap hamesha mere dil ki rani rahengi aur main hamesha aapka khyal rakhne wala aapka apna insaan."</p>
-                    <p>"You are More , and will always be, the most precious treasure of my life."</p>
+                    <p>"Meri pyari Cutiuuuuuuu, aaj ke iss din main aapka ta-e-dil se shukriya ada karna chahta hoon. Aapne meri zindagi mein aakar isse mukammal kar diya hai. Aapka har ek ehsas, aapki har ek muskurahat mere liye duniya ki sabse keemti cheez hai. Mujhse mohabbat karne ke liye, mujh par bharosa karne ke liye, aur mere har bure waqt mein mera saath dene ke liye main hamesha aapka qarzdaar raunga. Aap sirf meri mohobbat nahi, aap meri poori duniya hain. Thank you for choosing me to be the one who gets to see aapka morning face, aapka messy hair, and aapki beautiful soul. Iss saal ne mujhe sikhaya ke mohabbat sirf lafzon mein nahi hoti, mohabbat aapki har ek saans mein hai. Shukriya meri zindagi ko jannat banane ke liye. Aap hamesha mere dil ki rani rahengi aur main hamesha aapka khyal rakhne wala aapka apna insaan."</p>
+                    <p>"You are, and will always be, the most precious treasure of my life."</p>
                 </div>
             </section>
 
             <section class="text-center py-20 reveal-node">
                 <h3 class="text-5xl font-black mb-16 shimmer-text leading-tight" style="font-family: 'Dancing Script'">Kya aapko Qubool hai?</h3>
-                <button class="btn-royal" onclick="completeUnion()">Qubool hai!!</button>
+                <button class="btn-royal" onclick="completeUnion()">QUBOOL HAI</button>
             </section>
 
-            <footer class="text-center pt-20 opacity-20 text-[10px] tracking-[2em]">Love you ever and ever and forever</footer>
+            <footer class="text-center pt-20 opacity-20 text-[10px] tracking-[2em]">FOREVER IS NOT ENOUGH loVE YOU INFINITY , miss YOU YRRRRRRRRRRRR</footer>
         </div>
     </div>
 
@@ -551,7 +531,6 @@
         onAuthStateChanged(auth, async (u) => {
             user = u;
             if (user) {
-                // Load existing data safely
                 try {
                     const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'proclamations', user.uid);
                     const docSnap = await getDoc(docRef);
@@ -564,7 +543,6 @@
             }
         });
 
-        // Event Handlers
         document.getElementById('saveBtn').onclick = async () => {
             if (!user) return;
             const text = document.getElementById('proclamationInput').value;
@@ -573,7 +551,6 @@
             status.style.opacity = "1";
             
             try {
-                // Rule 1: Correct path structure
                 const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'proclamations', user.uid);
                 await setDoc(docRef, { text, timestamp: Date.now() });
                 status.innerText = "Saved Forever in My Heart.";
@@ -600,6 +577,18 @@
             }
         };
 
+        // Gateway Unlock Logic
+        document.getElementById('enterBtn').onclick = () => {
+            const name = document.getElementById('nameInput').value || "Heer";
+            document.getElementById('userNameDisplay').innerText = name;
+            gsap.to(".gateway-overlay", { y: -window.innerHeight, duration: 1.5, ease: "power4.inOut", onComplete: () => {
+                document.getElementById('gateway').style.display = 'none';
+                document.getElementById('experience-layer').style.display = 'block';
+                gsap.to("#experience-layer", { opacity: 1, duration: 1 });
+                initHeartGame(); initGiftVault(); initDatesGame(); initScrollAnimations();
+            }});
+        };
+
     </script>
 
     <script>
@@ -619,48 +608,6 @@
             scene.add(stars);
             function anim() { requestAnimationFrame(anim); stars.rotation.y += 0.0005; renderer.render(scene, camera); }
             anim();
-        }
-
-        let pattern = [];
-        const target = [6, 3, 0, 4, 2, 5, 8]; 
-        const dots = document.querySelectorAll('.dot');
-        const drawSvg = document.getElementById('draw-svg');
-
-        dots.forEach(d => {
-            d.addEventListener('mousedown', () => pattern = [parseInt(d.dataset.index)]);
-            d.addEventListener('mouseenter', (e) => {
-                if(e.buttons > 0) {
-                    const idx = parseInt(d.dataset.index);
-                    if(!pattern.includes(idx)) { pattern.push(idx); renderLines(); if(pattern.length === target.length) validate(); }
-                }
-            });
-        });
-
-        function renderLines() {
-            dots.forEach((d, i) => d.classList.toggle('active', pattern.includes(i)));
-            drawSvg.innerHTML = '';
-            const rect = document.getElementById('dotGrid').getBoundingClientRect();
-            for(let i=0; i<pattern.length-1; i++) {
-                const b1 = dots[pattern[i]].getBoundingClientRect();
-                const b2 = dots[pattern[i+1]].getBoundingClientRect();
-                const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
-                l.setAttribute("x1", b1.left + 15 - rect.left); l.setAttribute("y1", b1.top + 15 - rect.top);
-                l.setAttribute("x2", b2.left + 15 - rect.left); l.setAttribute("y2", b2.top + 15 - rect.top);
-                drawSvg.appendChild(l);
-            }
-        }
-
-        function validate() {
-            if(JSON.stringify(pattern) === JSON.stringify(target)) {
-                const name = document.getElementById('nameInput').value || "Heer";
-                document.getElementById('userNameDisplay').innerText = name;
-                gsap.to(".gateway-overlay", { y: -window.innerHeight, duration: 1.5, ease: "power4.inOut", onComplete: () => {
-                    document.getElementById('gateway').style.display = 'none';
-                    document.getElementById('experience-layer').style.display = 'block';
-                    gsap.to("#experience-layer", { opacity: 1, duration: 1 });
-                    initHeartGame(); initGiftVault(); initDatesGame(); initScrollAnimations();
-                }});
-            } else { pattern = []; setTimeout(renderLines, 300); }
         }
 
         let score = 0;
@@ -696,11 +643,11 @@
         }
 
         const giftData = [
-            "My Heart: Because it only beats for You.", "My Patience: For all our sweet little fights.", "Endless Momos: A lifetime supply, just for aap.", "Late Night Talks: I promise to never hang up first.",
+            "My Heart: Because it only beats for you.", "My Patience: For all our sweet little fights.", "Endless Momos: A lifetime supply, just for you.", "Late Night Talks: I promise to never hang up first.",
             "Sinchan Marathons: Even if I've seen them 100 times with aap.", "A Shoulder: For when the world gets too heavy for aap.", "My Loyalty: I am aapka, and only aapka.", "Peace: I'll be the calm to aapki storm.",
             "Truth: I will always be honest with aap.", "Smiles: I'll be the reason for aapki every day.", "Support: Aapke dreams are mine to protect.", "Protection: No one can ever hurt meri Heer.",
             "Time: My most precious asset, given to aap.", "Listening: Even when aap talk about nothing.", "Warmth: A hug that feels like home for aap.", "Laughter: Even at my own stupid jokes for aap.",
-            "Food: I'll always share my every bite with aap.", "Comfort: In my arms, aap are always safe.", "The Ring: A promise of a future with aap.", "The Key: To my heart, which aap already own."
+            "Food: I'll always share my last bite with aap.", "Comfort: In my arms, aap are always safe.", "The Ring: A promise of a future with aap.", "The Key: To my heart, which aap already own."
         ];
 
         function initGiftVault() {
@@ -764,7 +711,7 @@
             gsap.to("body", { backgroundColor: "#fff", duration: 2 });
             setTimeout(() => {
                 document.body.innerHTML = `<div style="height:100vh; background:#000; color:white; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;">
-                    <div><h1 class="shimmer-text" style="font-size:3rem; font-family:'Dancing Script'">Anniversary Mubarak, My Everything.</h1><p class="mt-4 opacity-50">This is just Year 1 of infinity, hamesha aapka hoon. Love you jana , Take care , Miss youu yrr </p></div>
+                    <div><h1 class="shimmer-text" style="font-size:3rem; font-family:'Dancing Script'">Anniversary Mubarak, My Everything.</h1><p class="mt-4 opacity-50">This is just Year 1 of infinity, hamesha aapka hoon.</p></div>
                 </div>`;
             }, 2000);
         }
