@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Eternal Union - 19 Jan 2026</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Outfit:wght@100;400;900&family=Playfair+Display:ital,wght@0,900;1,900&family=Noto+Serif+Devanagari:wght@400;700&display=swap');
+
+        :root {
+            --rose-gold: #e5b3a3;
+            --gold-leaf: #d4af37;
+            --deep-obsidian: #030005;
+            --ethereal-white: #fdfbfb;
+            --silk-glow: rgba(229, 179, 163, 0.4);
+        }
+
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; cursor: none; }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background: var(--deep-obsidian);
+            font-family: 'Outfit', sans-serif;
+            color: white;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        #royal-cursor {
+            width: 20px; height: 20px;
+            border: 1.5px solid var(--gold-leaf);
+            border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999;
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 15px var(--gold-leaf);
+        }
+
+        .shimmer-text {
+            background: linear-gradient(90deg, #fff, var(--gold-leaf), var(--rose-gold), #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s linear infinite;
+        }
+
+        @keyframes shimmer { to { background-position: 200% center; } }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .silk-border {
+            position: relative;
+            border: 1px solid transparent;
+            background: linear-gradient(var(--deep-obsidian), var(--deep-obsidian)) padding-box,
+                        linear-gradient(45deg, var(--gold-leaf), var(--rose-gold), var(--gold-leaf)) border-box;
+            box-shadow: 0 0 30px var(--silk-glow);
+            animation: silk-pulse 3s infinite ease-in-out;
+        }
+
+        @keyframes silk-pulse {
+            0%, 100% { box-shadow: 0 0 20px var(--silk-glow); }
+            50% { box-shadow: 0 0 45px rgba(229, 179, 163, 0.7); }
+        }
+
+        .heartbeat-sync {
+            animation: heartbeat 2.5s infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(0.98); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(0.98); }
+        }
+
+        .anniversary-header {
+            position: fixed; top: 0; width: 100%;
+            padding: 20px 0; z-index: 1000;
+            background: linear-gradient(to bottom, var(--deep-obsidian), transparent);
+            text-align: center;
+        }
+
+        #canvas-container { position: fixed; inset: 0; z-index: 1; }
+
+        #experience-layer {
+            position: relative; z-index: 10; opacity: 0; display: none;
+            padding-top: 100px;
+        }
+
+        .gateway-overlay {
+            position: fixed; inset: 0; z-index: 2000;
+            background: #000; display: flex; justify-content: center; align-items: center;
+        }
+
+        .dot {
+            width: 30px; height: 30px;
+            border: 1px solid var(--gold-leaf);
+            border-radius: 50%; cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .dot.active {
+            background: var(--gold-leaf);
+            transform: scale(1.4);
+            box-shadow: 0 0 40px var(--gold-leaf);
+        }
+
+        .vow-card {
+            border-left: 2px solid var(--gold-leaf);
+            padding: 30px; margin: 40px 0;
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.05), transparent);
+            border-radius: 0 30px 30px 0;
+            text-align: left; transition: transform 0.4s;
+        }
+
+        .btn-royal {
+            background: linear-gradient(135deg, var(--gold-leaf), #b8860b);
+            color: black; font-weight: 900;
+            padding: 24px 80px; border-radius: 100px;
+            letter-spacing: 4px; box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
+            transition: all 0.3s;
+        }
+
+        #draw-svg { position: absolute; inset: 0; pointer-events: none; }
+        line { stroke: var(--gold-leaf); stroke-width: 5; stroke-linecap: round; filter: drop-shadow(0 0 8px var(--gold-leaf)); }
+
+        .stat-badge {
+            display: inline-block; padding: 10px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px; margin: 10px;
+            font-size: 0.8rem; letter-spacing: 2px;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .reveal-node { opacity: 0; transform: translateY(40px); }
+
+        .heart-glow {
+            font-size: 80px; filter: drop-shadow(0 0 30px #ff4d6d);
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px #ff4d6d); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 50px #ff4d6d); }
+        }
+
+        .timeline-box {
+            position: relative;
+            padding-left: 30px;
+            border-left: 1px solid var(--gold-leaf);
+            margin-bottom: 40px;
+        }
+        .timeline-dot {
+            position: absolute; left: -6px; top: 0;
+            width: 12px; height: 12px;
+            background: var(--gold-leaf);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--gold-leaf);
+        }
+
+        #dates-canvas, #heart-game-container {
+            width: 100%; min-height: 350px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 20px;
+            position: relative; overflow: hidden;
+            border: 1px dashed var(--gold-leaf);
+        }
+
+        .date-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--gold-leaf);
+            color: var(--gold-leaf);
+            padding: 15px; border-radius: 12px;
+            cursor: pointer; transition: 0.3s;
+            font-weight: bold; width: 60px; height: 60px;
+        }
+        .date-btn.correct { background: var(--gold-leaf); color: black; transform: scale(1.1); }
+
+        .fingerprint-container {
+            position: relative; width: 220px; height: 280px;
+            margin: 0 auto; display: flex; flex-direction: column; align-items: center;
+        }
+        .fp-svg {
+            width: 150px; height: 180px; fill: none;
+            stroke: var(--gold-leaf); stroke-width: 2;
+            filter: drop-shadow(0 0 10px var(--gold-leaf));
+            opacity: 0.6; transition: 0.3s;
+        }
+        .scanning .fp-svg { opacity: 1; stroke: #ff4d6d; filter: drop-shadow(0 0 20px #ff4d6d); }
+        .fp-scanner-bar {
+            position: absolute; width: 160px; height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold-leaf), transparent);
+            box-shadow: 0 0 15px var(--gold-leaf);
+            top: 0; left: 50%; transform: translateX(-50%);
+            display: none; pointer-events: none;
+        }
+
+        .gift-box {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, #ff4d6d, #c9184a);
+            border-radius: 12px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 30px; cursor: pointer;
+            position: relative; transition: 0.4s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .gift-box.opened { background: rgba(255,255,255,0.05); border: 1px solid var(--gold-leaf); transform: scale(0.95); }
+        .gift-msg {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
+            background: rgba(15, 5, 20, 0.95);
+            padding: 40px; border-radius: 30px; border: 2px solid var(--gold-leaf);
+            z-index: 2000; max-width: 90%; text-align: center;
+            opacity: 0; pointer-events: none; transition: 0.4s;
+            box-shadow: 0 0 100px rgba(212, 175, 55, 0.3);
+        }
+        .gift-msg.active { opacity: 1; transform: translate(-50%, -50%) scale(1); pointer-events: auto; }
+
+        .gift-grid { display: grid; grid-template-cols: repeat(4, 1fr); gap: 15px; }
+
+        #catcher {
+            position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+            width: 80px; height: 60px; font-size: 50px; display: flex; justify-content: center;
+        }
+        .falling-heart { position: absolute; font-size: 24px; user-select: none; }
+
+        .heart-input-container {
+            border: 2px solid #ff4d6d;
+            box-shadow: 0 0 20px rgba(255, 77, 109, 0.3);
+            background: rgba(255, 77, 109, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            transition: all 0.5s;
+        }
+        .heart-input-container:focus-within {
+            box-shadow: 0 0 40px rgba(255, 77, 109, 0.6);
+            border-color: #fff;
+        }
+
+        .haptic-pulse {
+            animation: haptic 0.4s ease-out;
+        }
+        @keyframes haptic {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); filter: brightness(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .three-d-heart {
+            font-size: 100px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateHeart 4s infinite linear;
+            display: inline-block;
+        }
+        @keyframes rotateHeart {
+            0% { transform: rotateY(0deg) scale(1); }
+            50% { transform: rotateY(180deg) scale(1.2); }
+            100% { transform: rotateY(360deg) scale(1); }
+        }
+
+        .btn-action {
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .btn-save { background: #d4af37; color: black; border: none; }
+        .btn-delete { border: 1px solid rgba(255,255,255,0.2); color: white; background: transparent; }
+        .btn-save:hover { box-shadow: 0 0 20px #d4af37; transform: scale(1.05); }
+        .btn-delete:hover { background: rgba(255,0,0,0.1); border-color: red; }
+
+    </style>
+</head>
+<body>
+
+    <div id="royal-cursor"></div>
+    <div class="anniversary-header">
+        <div class="shimmer-text tracking-[1.2em] font-black text-[10px] uppercase">Union Since 19 January 2025 • Celebrating 2026</div>
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <div id="gateway" class="gateway-overlay">
+        <div class="glass-panel p-12 text-center max-w-[450px] w-[90%] border-gold-leaf/30">
+            <div class="text-gold-500 text-[9px] tracking-[1.5em] uppercase mb-10 font-bold opacity-60">Heart Lock Recognition</div>
+            <h1 class="text-5xl font-black mb-14 shimmer-text" style="font-family: 'Playfair Display'">Meri <br> Heer</h1>
+            
+            <input type="text" id="nameInput" placeholder="Aapka Mukammal Naam..." class="w-full bg-transparent border-b border-gold-500/30 p-4 text-center outline-none text-2xl font-light text-white mb-16 focus:border-gold-500 transition-all">
+            
+            <div class="relative py-10">
+                <div class="grid grid-cols-3 gap-14 mx-auto w-fit relative" id="dotGrid">
+                    <svg id="draw-svg"></svg>
+                    <div class="dot" data-index="0"></div><div class="dot" data-index="1"></div><div class="dot" data-index="2"></div>
+                    <div class="dot" data-index="3"></div><div class="dot" data-index="4"></div><div class="dot" data-index="5"></div>
+                    <div class="dot" data-index="6"></div><div class="dot" data-index="7"></div><div class="dot" data-index="8"></div>
+                </div>
+            </div>
+            <p class="text-[9px] text-white/30 mt-16 tracking-[1em] uppercase">M-Shape for Memory</p>
+        </div>
+    </div>
+
+    <div id="experience-layer">
+        <div class="max-w-xl mx-auto px-6 pb-40">
+            
+            <section class="text-center py-20">
+                <h2 class="text-7xl font-bold mb-10 leading-tight" style="font-family: 'Dancing Script';">Happy Anniversary, <br><span class="shimmer-text" id="userNameDisplay">My Heer</span></h2>
+                <div class="flex flex-wrap justify-center mb-20">
+                    <div class="stat-badge">365 Days of Us</div>
+                    <div class="stat-badge">8,760 Hours of Love</div>
+                    <div class="stat-badge">525,600 Mins of Care</div>
+                </div>
+                <div class="heart-glow mb-20">💍</div>
+            </section>
+
+            <section class="glass-panel p-10 mb-20 reveal-node border-gold-leaf/20">
+                <h3 class="text-3xl font-bold mb-8 shimmer-text text-center" style="font-family: 'Playfair Display'">Ek Saal Ki Dastaan</h3>
+                <div class="text-center space-y-6">
+                    <p>"To my dearest Heer, today marks exactly one year since our worlds became one. It hasn't just been 365 days; it's been a lifetime of smiles, a billion moments of 'Momo' cravings, and the peace of knowing aap meri hain."</p>
+                    <p>"Aap mere liye sirf meri girlfriend nahi, aap meri sukoon ho. Har ladai mein, har hasi mein, aur har khamoshi mein... sirf aap hi aap ho. Main aapka kitna shukr guzar hoon ke aap meri zindagi mein aaye."</p>
+                    <p class="text-rose-400 font-bold">Happy 1st Anniversary, my Queen!</p>
+                </div>
+            </section>
+
+            <section class="glass-panel p-10 mb-20 reveal-node border-gold-leaf/20">
+                <h3 class="text-3xl font-bold mb-12 shimmer-text text-center" style="font-family: 'Playfair Display'">Safarnama: Our Timeline</h3>
+                <div class="timeline-box">
+                    <div class="timeline-dot"></div>
+                    <p class="text-gold-400 font-bold text-xs tracking-widest uppercase">19 January 2025</p>
+                    <h4 class="text-xl font-bold mt-1">The First Hello</h4>
+                    <p class="text-sm text-white/60 italic">The day I realized my search for happiness ended with aapki smile.</p>
+                </div>
+                <div class="timeline-box">
+                    <div class="timeline-dot"></div>
+                    <p class="text-gold-400 font-bold text-xs tracking-widest uppercase">The Summer of Sinchan</p>
+                    <h4 class="text-xl font-bold mt-1">Becoming Best Friends</h4>
+                    <p class="text-sm text-white/60 italic">Watching cartoons together until we fell asleep on the phone, aapke saath har pal yaadgaar tha.</p>
+                </div>
+                <div class="timeline-box" style="border-left: none;">
+                    <div class="timeline-dot"></div>
+                    <p class="text-gold-400 font-bold text-xs tracking-widest uppercase">19 January 2026</p>
+                    <h4 class="text-xl font-bold mt-1">Forever to Go</h4>
+                    <p class="text-sm text-white/60 italic">The first anniversary of a bond that is unbreakable, hamesha aapka saath chahiye.</p>
+                </div>
+            </section>
+
+            <section class="glass-panel p-8 mb-20 reveal-node border-gold-leaf/20">
+                <h3 class="text-2xl font-bold mb-2 shimmer-text text-center" style="font-family: 'Playfair Display'">Heart Collector</h3>
+                <p class="text-center text-[10px] text-white/40 mb-6 uppercase tracking-widest">Catch 10 hearts to unlock my message</p>
+                <div id="heart-game-container">
+                    <div id="catcher">👐</div>
+                    <div id="score-display" class="absolute top-4 right-4 text-gold-500 font-bold">Hearts: 0/10</div>
+                </div>
+                <div id="heart-win-msg" class="hidden text-center mt-6 p-4 bg-gold-leaf/10 rounded-xl">
+                    <p class="italic text-rose-300">"Just like these hearts, I will catch every tear and every smile of aapka forever."</p>
+                </div>
+            </section>
+
+            <section class="glass-panel p-10 mb-20 reveal-node border-gold-leaf/20">
+                <h3 class="text-3xl font-bold mb-10 shimmer-text text-center" style="font-family: 'Playfair Display'">Royal Favorites Vault</h3>
+                <div class="grid grid-cols-2 gap-8 mb-8">
+                    <div class="flex items-center gap-4"><div class="text-3xl">🌑</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">COLOR</p><p class="text-lg">Black</p></div></div>
+                    <div class="flex items-center gap-4"><div class="text-3xl">🫂</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">MOMENT</p><p class="text-lg">With Aap</p></div></div>
+                    <div class="flex items-center gap-4"><div class="text-3xl">🪻</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">FLOWER</p><p class="text-lg">Hyacinth</p></div></div>
+                    <div class="flex items-center gap-4"><div class="text-3xl"> dumpling </div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">FOOD</p><p class="text-lg">Momo</p></div></div>
+                    <div class="flex items-center gap-4"><div class="text-3xl">🎵</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">SOUND</p><p class="text-lg">Aapki Laughter</p></div></div>
+                    <div class="flex items-center gap-4"><div class="text-3xl">🌙</div><div><p class="text-gold-400 text-[10px] font-bold tracking-widest">TIME</p><p class="text-lg">Midnight</p></div></div>
+                </div>
+                <div class="border-t border-white/10 pt-8 text-center">
+                    <p class="text-gold-400 text-[10px] font-bold tracking-[0.5em] mb-4 uppercase">Royal Melody</p>
+                    <p class="text-lg italic shimmer-text">Ek Tarfa • Humsafar • Finding Her</p>
+                </div>
+            </section>
+
+            <section class="glass-panel p-10 mb-20 reveal-node">
+                <h3 class="text-center text-3xl font-bold mb-14 shimmer-text" style="font-family: 'Playfair Display'">Dastaan-e-Ishq</h3>
+                <div class="space-y-16 text-center text-white/90 italic">
+                    <div class="reveal-node">
+                        <p class="text-xl text-rose-300">"Kuch dolat par naaj karte hain toh kuch sohrat par naaj karte hain,<br>Hamare pass toh aapki mohabbat hai isliye hum apni kismat par naaj karte hain."</p>
+                    </div>
+                    <div class="reveal-node">
+                        <p>"Mera dil wahaan hai jahaan aap hain,<br>Aur aap jahaan hain, wahi meri jannat hai."</p>
+                    </div>
+                    <div class="reveal-node">
+                        <p class="text-gold-400">"Aap mera naseeb hain, aap hi mera khwab hain,<br>Aapke bina meri zindagi ek adhura sawal hai."</p>
+                    </div>
+                    <div class="reveal-node">
+                        <p>"Likhu toh kya likhu aapki tareef mein,<br>Bas itna jaan lijiye, aap hi meri pehli aur aakhri umeed hain."</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-panel p-10 mb-20 reveal-node border-gold-leaf/20">
+                <h3 class="text-center text-3xl font-bold mb-10 shimmer-text" style="font-family: 'Playfair Display'">Humara Wada (The Promises)</h3>
+                <div class="space-y-6">
+                    <div class="vow-card">
+                        <h4 class="text-gold-500 font-bold uppercase tracking-widest text-xs">Humsafar</h4>
+                        <p class="italic">"Wada hai mera, har mushkil raste mein main aapka hamsafar ban kar saath nibhaunga."</p>
+                    </div>
+                    <div class="vow-card">
+                        <h4 class="text-gold-500 font-bold uppercase tracking-widest text-xs">Wafa</h4>
+                        <p class="italic">"Meri wafa hamesha sirf aapke liye rahegi, har din har pal."</p>
+                    </div>
+                    <div class="vow-card">
+                        <h4 class="text-gold-500 font-bold uppercase tracking-widest text-xs">Sukoon</h4>
+                        <p class="italic">"Main wada karta hoon ke main hamesha aapke sukoon ki wajah banunga, aapke aansuon ki nahi."</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-panel p-10 mb-20 reveal-node border-rose-500/30">
+                <h3 class="text-center text-3xl font-bold mb-10 shimmer-text" style="font-family: 'Playfair Display'">The Royal Vows</h3>
+                <div class="grid grid-cols-1 gap-8">
+                    <div class="p-6 silk-border rounded-2xl heartbeat-sync">
+                        <h4 class="text-rose-400 font-black uppercase text-[10px] tracking-widest mb-2">Eternal Devotion</h4>
+                        <p class="text-sm italic">"Main aapka hoon, aapki har khamoshi ka jawab hoon. I vow to be the man who earns aapki love over and over, every single sunrise."</p>
+                    </div>
+                    <div class="p-6 silk-border rounded-2xl heartbeat-sync">
+                        <h4 class="text-rose-400 font-black uppercase text-[10px] tracking-widest mb-2">Infinite Protection</h4>
+                        <p class="text-sm italic">"Duniya ki koi bhi takleef aap tak pahunchnay se pehle mujhse guzregi. I vow to be aapka invincible shield against the world."</p>
+                    </div>
+                    <div class="p-6 silk-border rounded-2xl heartbeat-sync">
+                        <h4 class="text-rose-400 font-black uppercase text-[10px] tracking-widest mb-2">Sacred Honesty</h4>
+                        <p class="text-sm italic">"Hamara rishta sachai ki bunyaad par khara hai. I vow to always hold aapka heart with hands of absolute truth and transparency."</p>
+                    </div>
+                    <div class="p-6 silk-border rounded-2xl heartbeat-sync">
+                        <h4 class="text-rose-400 font-black uppercase text-[10px] tracking-widest mb-2">Final Destination</h4>
+                        <p class="text-sm italic">"Mera rasta aap par khatam hota hai. I vow that my last breath will carry aapka name, just as my first love did."</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-panel p-8 mb-20 reveal-node border-gold-leaf/20">
+                <h3 class="text-2xl font-bold mb-4 shimmer-text text-center" style="font-family: 'Playfair Display'">The Sacred Numbers</h3>
+                <p class="text-center text-xs text-white/50 mb-6 uppercase tracking-widest">Select the keys to my heart: 25, 19, 27, 28, 15</p>
+                <div id="dates-canvas" class="p-6 flex flex-wrap gap-3 justify-center items-center"></div>
+                <div id="hug-msg" class="hidden text-center mt-6">
+                    <div class="text-7xl mb-4">🫂</div>
+                    <p class="text-pink-400 italic font-bold">"Virtual Hug Unlocked! Every date with aap is my favorite date."</p>
+                </div>
+            </section>
+
+            <section class="glass-panel p-10 mb-20 reveal-node">
+                <h3 class="text-center text-3xl font-bold mb-4 shimmer-text" style="font-family: 'Playfair Display'">The Mystery Vault</h3>
+                <p class="text-center text-[10px] text-white/40 mb-10 tracking-[0.4em] uppercase">CLICK EACH BOX TO READ YOUR MESSAGE</p>
+                <div class="gift-grid" id="giftVault"></div>
+                <div class="text-center mt-10">
+                    <p id="giftCounter" class="text-gold-500 font-bold tracking-widest text-xs uppercase">Gifts Opened: 0 / 20</p>
+                </div>
+            </section>
+
+            <section class="glass-panel p-10 mb-20 reveal-node silk-border">
+                <h3 class="text-center text-3xl font-bold mb-6 shimmer-text" style="font-family: 'Playfair Display'">Heer's Royal Proclamation</h3>
+                <p class="text-center text-xs text-white/40 mb-8 uppercase tracking-widest">A Sacred Space for Your Heart</p>
+                <div class="heart-input-container" id="proclamationArea">
+                    <textarea id="proclamationInput" placeholder="Write what you feel, my one-in-a-billion Queen..." 
+                              class="w-full bg-transparent outline-none text-rose-100 placeholder:text-rose-900/30 min-h-[200px] resize-none text-lg leading-relaxed"></textarea>
+                </div>
+                <div class="flex justify-center gap-4 mt-6">
+                    <button class="btn-action btn-delete" id="deleteBtn">Delete</button>
+                    <button class="btn-action btn-save" id="saveBtn">Save Forever</button>
+                </div>
+                <p id="saveStatus" class="mt-4 text-[10px] text-center italic text-rose-300 uppercase tracking-[0.5em] opacity-0 transition-opacity">Saving to the Heavens...</p>
+            </section>
+
+            <section class="glass-panel p-10 text-center py-20 reveal-node border-gold-leaf/20">
+                <h3 class="text-3xl font-black mb-6 shimmer-text" style="font-family: 'Playfair Display'">The Fingerprint Oath</h3>
+                <p class="text-xs text-white/60 tracking-widest uppercase mb-10">Hold for 3 seconds to seal our promise</p>
+                <div class="fingerprint-container" id="fpArea">
+                    <div class="fp-scanner-bar" id="scanLine"></div>
+                    <svg class="fp-svg" viewBox="0 0 100 120">
+                        <path d="M50,10 C30,10 15,30 15,55 C15,80 30,100 50,100 C70,100 85,80 85,55 C85,30 70,10 50,10" />
+                        <path d="M50,25 C40,25 30,35 30,55 C30,75 40,85 50,85 C60,85 70,75 70,55 C70,35 60,25 50,25" />
+                        <path d="M50,40 C45,40 40,45 40,55 C40,65 45,70 50,70 C55,70 60,65 60,55 C60,45 55,40 50,40" />
+                        <circle cx="50" cy="55" r="5" />
+                    </svg>
+                </div>
+                <div id="oathDetails" class="mt-10 space-y-4 text-sm text-white/40 italic">
+                    <p id="p1" class="transition-all">I promise to never let aap sleep sad.</p>
+                    <p id="p2" class="transition-all">I promise to always bring aap Momos when hungry.</p>
+                    <p id="p3" class="transition-all">I promise to choose aap, every single day.</p>
+                </div>
+                <div id="promiseStatus" class="mt-8 text-rose-500 font-black text-xl opacity-0 tracking-widest">OATH SEALED IN BLOOD & LOVE</div>
+            </section>
+
+            <section class="glass-panel p-12 mb-20 reveal-node border-gold-leaf/40 text-center">
+                <div class="three-d-heart mb-8">❤️</div>
+                <h3 class="text-4xl font-black mb-10 shimmer-text" style="font-family: 'Playfair Display'">A Royal Thank You</h3>
+                <div class="space-y-6 text-white/80 leading-loose italic">
+                    <p>"Meri pyari Heer, aaj ke iss din main aapka ta-e-dil se shukriya ada karna chahta hoon. Aapne meri zindagi mein aakar isse mukammal kar diya hai. Aapka har ek ehsas, aapki har ek muskurahat mere liye duniya ki sabse keemti cheez hai. Mujhse mohabbat karne ke liye, mujh par bharosa karne ke liye, aur mere har bure waqt mein mera saath dene ke liye main hamesha aapka qarzdaar raunga. Aap sirf meri mohobbat nahi, aap meri poori duniya hain. Thank you for choosing me to be the one who gets to see aapka morning face, aapka messy hair, and aapki beautiful soul. Iss saal ne mujhe sikhaya ke mohabbat sirf lafzon mein nahi hoti, mohabbat aapki har ek saans mein hai. Shukriya meri zindagi ko jannat banane ke liye. Aap hamesha mere dil ki rani rahengi aur main hamesha aapka khyal rakhne wala aapka apna insaan."</p>
+                    <p>"You are, and will always be, the most precious treasure of my life."</p>
+                </div>
+            </section>
+
+            <section class="text-center py-20 reveal-node">
+                <h3 class="text-5xl font-black mb-16 shimmer-text leading-tight" style="font-family: 'Dancing Script'">Hamesha Ke Liye?</h3>
+                <button class="btn-royal" onclick="completeUnion()">MAIN AAPKA HOON</button>
+            </section>
+
+            <footer class="text-center pt-20 opacity-20 text-[10px] tracking-[2em]">FOREVER IS NOT ENOUGH</footer>
+        </div>
+    </div>
+
+    <div id="giftModal" class="gift-msg">
+        <h2 id="modalTitle" class="text-gold-500 font-bold text-2xl mb-4">Gift #1</h2>
+        <p id="modalBody" class="text-white/80 leading-relaxed mb-6 italic"></p>
+        <button onclick="closeModal()" class="text-xs tracking-[0.3em] uppercase border border-white/20 px-6 py-2 rounded-full hover:bg-white/10">Close</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        let user = null;
+
+        const initAuth = async () => {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+                await signInAnonymously(auth);
+            }
+        };
+
+        onAuthStateChanged(auth, async (u) => {
+            user = u;
+            if (user) {
+                // Load existing data safely
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'proclamations', user.uid);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        document.getElementById('proclamationInput').value = docSnap.data().text || "";
+                    }
+                } catch (e) { console.error("Data load error", e); }
+            } else {
+                initAuth();
+            }
+        });
+
+        // Event Handlers
+        document.getElementById('saveBtn').onclick = async () => {
+            if (!user) return;
+            const text = document.getElementById('proclamationInput').value;
+            const status = document.getElementById('saveStatus');
+            status.innerText = "Sealing the Vow...";
+            status.style.opacity = "1";
+            
+            try {
+                // Rule 1: Correct path structure
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'proclamations', user.uid);
+                await setDoc(docRef, { text, timestamp: Date.now() });
+                status.innerText = "Saved Forever in My Heart.";
+                setTimeout(() => status.style.opacity = "0", 3000);
+            } catch (e) {
+                console.error(e);
+                status.innerText = "Error sealing vow.";
+            }
+        };
+
+        document.getElementById('deleteBtn').onclick = async () => {
+            if (!user) return;
+            const status = document.getElementById('saveStatus');
+            status.innerText = "Erasing...";
+            status.style.opacity = "1";
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'proclamations', user.uid);
+                await deleteDoc(docRef);
+                document.getElementById('proclamationInput').value = "";
+                status.innerText = "Memory Cleaned.";
+                setTimeout(() => status.style.opacity = "0", 3000);
+            } catch (e) {
+                status.style.opacity = "0";
+            }
+        };
+
+    </script>
+
+    <script>
+        let scene, camera, renderer, stars;
+        function initThree() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 1000);
+            camera.position.z = 1;
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+            const geo = new THREE.BufferGeometry();
+            const verts = [];
+            for(let i=0; i<10000; i++) verts.push((Math.random()-0.5)*2000, (Math.random()-0.5)*2000, (Math.random()-0.5)*2000);
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+            stars = new THREE.Points(geo, new THREE.PointsMaterial({ color: 0xd4af37, size: 0.7 }));
+            scene.add(stars);
+            function anim() { requestAnimationFrame(anim); stars.rotation.y += 0.0005; renderer.render(scene, camera); }
+            anim();
+        }
+
+        let pattern = [];
+        const target = [6, 3, 0, 4, 2, 5, 8]; 
+        const dots = document.querySelectorAll('.dot');
+        const drawSvg = document.getElementById('draw-svg');
+
+        dots.forEach(d => {
+            d.addEventListener('mousedown', () => pattern = [parseInt(d.dataset.index)]);
+            d.addEventListener('mouseenter', (e) => {
+                if(e.buttons > 0) {
+                    const idx = parseInt(d.dataset.index);
+                    if(!pattern.includes(idx)) { pattern.push(idx); renderLines(); if(pattern.length === target.length) validate(); }
+                }
+            });
+        });
+
+        function renderLines() {
+            dots.forEach((d, i) => d.classList.toggle('active', pattern.includes(i)));
+            drawSvg.innerHTML = '';
+            const rect = document.getElementById('dotGrid').getBoundingClientRect();
+            for(let i=0; i<pattern.length-1; i++) {
+                const b1 = dots[pattern[i]].getBoundingClientRect();
+                const b2 = dots[pattern[i+1]].getBoundingClientRect();
+                const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                l.setAttribute("x1", b1.left + 15 - rect.left); l.setAttribute("y1", b1.top + 15 - rect.top);
+                l.setAttribute("x2", b2.left + 15 - rect.left); l.setAttribute("y2", b2.top + 15 - rect.top);
+                drawSvg.appendChild(l);
+            }
+        }
+
+        function validate() {
+            if(JSON.stringify(pattern) === JSON.stringify(target)) {
+                const name = document.getElementById('nameInput').value || "Heer";
+                document.getElementById('userNameDisplay').innerText = name;
+                gsap.to(".gateway-overlay", { y: -window.innerHeight, duration: 1.5, ease: "power4.inOut", onComplete: () => {
+                    document.getElementById('gateway').style.display = 'none';
+                    document.getElementById('experience-layer').style.display = 'block';
+                    gsap.to("#experience-layer", { opacity: 1, duration: 1 });
+                    initHeartGame(); initGiftVault(); initDatesGame(); initScrollAnimations();
+                }});
+            } else { pattern = []; setTimeout(renderLines, 300); }
+        }
+
+        let score = 0;
+        function initHeartGame() {
+            const container = document.getElementById('heart-game-container');
+            const catcher = document.getElementById('catcher');
+            let containerRect = container.getBoundingClientRect();
+            container.addEventListener('mousemove', (e) => {
+                let x = e.clientX - containerRect.left;
+                catcher.style.left = `${Math.max(40, Math.min(x, containerRect.width - 40))}px`;
+            });
+            const spawn = () => {
+                if(score >= 10) return;
+                const h = document.createElement('div');
+                h.className = 'falling-heart'; h.innerHTML = '❤️';
+                h.style.left = Math.random() * (containerRect.width - 20) + 'px';
+                h.style.top = '0px'; container.appendChild(h);
+                let top = 0;
+                const fall = setInterval(() => {
+                    top += 4; h.style.top = top + 'px';
+                    const hRect = h.getBoundingClientRect();
+                    const cRect = catcher.getBoundingClientRect();
+                    if(hRect.bottom >= cRect.top && hRect.left < cRect.right && hRect.right > cRect.left) {
+                        score++; document.getElementById('score-display').innerText = `Hearts: ${score}/10`;
+                        h.remove(); clearInterval(fall);
+                        if(score === 10) document.getElementById('heart-win-msg').classList.remove('hidden');
+                    }
+                    if(top > 350) { h.remove(); clearInterval(fall); }
+                }, 20);
+                setTimeout(spawn, 1000);
+            };
+            spawn();
+        }
+
+        const giftData = [
+            "My Heart: Because it only beats for aap.", "My Patience: For all our sweet little fights.", "Endless Momos: A lifetime supply, just for aap.", "Late Night Talks: I promise to never hang up first.",
+            "Sinchan Marathons: Even if I've seen them 100 times with aap.", "A Shoulder: For when the world gets too heavy for aap.", "My Loyalty: I am aapka, and only aapka.", "Peace: I'll be the calm to aapki storm.",
+            "Truth: I will always be honest with aap.", "Smiles: I'll be the reason for aapki every day.", "Support: Aapke dreams are mine to protect.", "Protection: No one can ever hurt meri Heer.",
+            "Time: My most precious asset, given to aap.", "Listening: Even when aap talk about nothing.", "Warmth: A hug that feels like home for aap.", "Laughter: Even at my own stupid jokes for aap.",
+            "Food: I'll always share my last bite with aap.", "Comfort: In my arms, aap are always safe.", "The Ring: A promise of a future with aap.", "The Key: To my heart, which aap already own."
+        ];
+
+        function initGiftVault() {
+            const vault = document.getElementById('giftVault');
+            giftData.forEach((msg, i) => {
+                const box = document.createElement('div');
+                box.className = 'gift-box'; box.innerHTML = '🎁';
+                box.onclick = () => {
+                    box.classList.add('opened'); box.innerHTML = '⭐';
+                    openModal(`Gift #${i+1}`, msg);
+                    const count = document.querySelectorAll('.gift-box.opened').length;
+                    document.getElementById('giftCounter').innerText = `Gifts Opened: ${count} / 20`;
+                };
+                vault.appendChild(box);
+            });
+        }
+        function openModal(title, body) { document.getElementById('modalTitle').innerText = title; document.getElementById('modalBody').innerText = body; document.getElementById('giftModal').classList.add('active'); }
+        function closeModal() { document.getElementById('giftModal').classList.remove('active'); }
+
+        const dates = [25, 19, 27, 28, 15];
+        let dIdx = 0;
+        function initDatesGame() {
+            const c = document.getElementById('dates-canvas');
+            const pool = [1, 15, 19, 12, 25, 27, 28, 30, 7, 21].sort(()=>Math.random()-0.5);
+            pool.forEach(n => {
+                const b = document.createElement('button');
+                b.className = 'date-btn'; b.innerText = n;
+                b.onclick = () => {
+                    if(n === dates[dIdx]) {
+                        b.classList.add('correct'); dIdx++;
+                        if(dIdx === dates.length) document.getElementById('hug-msg').classList.remove('hidden');
+                    } else { gsap.to(b, {x:10, repeat:3, yoyo:true, duration:0.1}); }
+                };
+                c.appendChild(b);
+            });
+        }
+
+        const fpArea = document.getElementById('fpArea');
+        const scanLine = document.getElementById('scanLine');
+        let scanTimer;
+        function startScan(e) {
+            e.preventDefault(); fpArea.classList.add('scanning'); scanLine.style.display = 'block';
+            gsap.to(scanLine, { top: '100%', duration: 1.5, repeat: -1, yoyo: true });
+            scanTimer = setTimeout(() => {
+                document.getElementById('promiseStatus').style.opacity = 1;
+                gsap.to('#oathDetails p', { color: '#d4af37', fontWeight: 'bold', stagger: 0.2 });
+                endScan();
+            }, 3000);
+        }
+        function endScan() { fpArea.classList.remove('scanning'); scanLine.style.display = 'none'; gsap.killTweensOf(scanLine); clearTimeout(scanTimer); }
+        fpArea.onmousedown = startScan; fpArea.onmouseup = endScan; fpArea.ontouchstart = startScan; fpArea.ontouchend = endScan;
+
+        function initScrollAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+            gsap.utils.toArray('.reveal-node').forEach(node => {
+                gsap.to(node, { scrollTrigger: { trigger: node, start: "top 90%" }, opacity: 1, y: 0, duration: 1 });
+            });
+        }
+
+        function completeUnion() {
+            gsap.to("body", { backgroundColor: "#fff", duration: 2 });
+            setTimeout(() => {
+                document.body.innerHTML = `<div style="height:100vh; background:#000; color:white; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;">
+                    <div><h1 class="shimmer-text" style="font-size:3rem; font-family:'Dancing Script'">Anniversary Mubarak, My Everything.</h1><p class="mt-4 opacity-50">This is just Year 1 of infinity, hamesha aapka hoon.</p></div>
+                </div>`;
+            }, 2000);
+        }
+
+        const cursor = document.getElementById('royal-cursor');
+        document.addEventListener('mousemove', (e) => { gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 }); });
+        window.onload = initThree;
+    </script>
+</body>
+</html>
